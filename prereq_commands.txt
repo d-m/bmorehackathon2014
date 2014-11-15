@@ -1,0 +1,4 @@
+Natural Language Toolbox:
+>>>nltk.download()
+the select "all-corpora"
+
