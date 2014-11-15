@@ -18,3 +18,8 @@ class HaikuStreamer(TwythonStreamer):
             synlist.append(len(synset.lemma_names()))
         first_max = synlist.index(max(synlist))
         return wn.synsets(word)[first_max].lemma_names()
+
+    def get_tweets(self, word):
+        wordlist = self._related_words(word)
+        wordstring = ', '.join(wordlist)
+        self.statuses.filter(track=wordstring)
