@@ -8,20 +8,19 @@ class buildHaiku():
         self.nLines = 0
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
-        keepGoing = tweetObj.qualityControl()
-        if keepGoing:
-            tweetObj.findWords()
-            Nsyls = 5 + 2*(self.nLines%2)
-            line = tweetObj.checkSylbls(Nsyls)
-            if line:
-                self.finalHaiku.append(line)
-                self.nLines += 1
-            if self.nLines == 3:
-                return self.finalHaiku
-            else:
-                return list()
-        else
-            return list()               
+        if not tweetObj.qualityControl()
+            return list()
+        tweetObj.findWords()
+        Nsyls = 5 + 2*(self.nLines%2)
+        line = tweetObj.checkSylbls(Nsyls)
+        if line:
+            self.finalHaiku.append(line)
+            self.nLines += 1
+        if self.nLines == 3:
+            return self.finalHaiku
+        else:
+            return list()
+
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
@@ -60,3 +59,4 @@ class checkTweet():
             return ' '.join(self.textWords[:i])
         else:
             return ''
+            
