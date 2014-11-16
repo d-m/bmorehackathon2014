@@ -36,20 +36,34 @@ class checkTweet():
         self.remove_urls()
         if self.retweetCheck():
             return False
-#         do some more checks
+        if self.words_no_vowels():
+            return False
         return True
     
     def replaceHashtag(self):
         self.text = self.text.replace('#', 'hashtag ')
 
     def remove_at_symbol(self):
-        self.text = search_delete('@', self.text)
+        self.text = self.search_delete('@', self.text)
 
     def remove_urls(self):
-        self.text = search_delete('http:', self.text)
+        self.text = self.search_delete('http:', self.text)
 
-    def retweetCheck(self, string_input):
-        if re.search('RT',string_input):
+    def retweetCheck(self):
+        split_text = self.text
+        if re.search('RT',split_text[0]):
+            return True
+        else:
+            return False
+
+    def words_no_vowels(self):
+        string_split = self.text.split()
+        for i in range(len(string_split)):
+            if re.search("([aeiouy]+)",string_split[i]):
+                string_split[i] = True
+            else:
+                string_split[i] = False
+        if False in string_split:
             return True
         else:
             return False
