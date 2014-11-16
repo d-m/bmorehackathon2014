@@ -99,7 +99,7 @@ class checkTweet():
             return list()
         return ' '.join(finalWords)               
     
-    def confirmSylsCounts(self, Nsyls, ):
+    def confirmSylsCounts(self, Nsyls):
         textWords = self.text.split()
         nWords = len(textWords)
         i = 0
@@ -107,6 +107,9 @@ class checkTweet():
         tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
         while i < nWords and sylsCount < Nsyls and not tooHard:
+            print(len(textWords[i]))
+            if len(textWords[i]) >= 100 #hyphenator will break and something is crazy
+                return list()
             libreSyls = len(self.h_en.syllables(textWords[i]))
             libreSyls = max(libreSyls, 1)
             simplSyls = self.count_syllables(textWords[i])
