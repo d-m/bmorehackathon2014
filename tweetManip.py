@@ -26,9 +26,7 @@ class buildHaiku():
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
         self.text = text
-        self.textWords = list()
-        self.nWords = 0
-        self.baseText = self.text
+#         self.baseText = self.text
 
     def qualityControl(self):
         self.replaceHashtag()
@@ -73,11 +71,16 @@ class checkTweet():
         return ' '.join(string_split_2)
 
     def checkSylbls(self, Nsyls):
-        self.textWords=self.text.split()
-        self.nWords = len(self.textWords)
-        return self.confirmSylsCounts(Nsyls)
+        forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or']
+        finalWords = self.confirmSylsCounts(Nsyls)
+            if any(finalWords[-1] == s for s in forbiddenEnds):
+                return list()
+            
+                            
     
-    def confirmSylsCounts(self, Nsyls):
+    def confirmSylsCounts(self, Nsyls, ):
+        textWords = self.text.split()
+        nWords = len(self.textWords)
         i = 0
         sylsCount = 0;
         tooHard = False;
