@@ -34,6 +34,7 @@ class checkTweet():
         self.replaceHashtag()
         self.remove_at_symbol()
         self.remove_urls()
+        self.remove_ampersand_words()
         if self.words_no_vowels():
             return False
         return True
@@ -46,6 +47,9 @@ class checkTweet():
 
     def remove_urls(self):
         self.text = self.search_delete('http:', self.text)
+
+    def remove_ampersand_words(self):
+        self.text = self.search_delete('&',self.text)
 
     def words_no_vowels(self):
         string_split = self.text.split()
