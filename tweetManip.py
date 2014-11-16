@@ -12,7 +12,6 @@ class buildHaiku():
         tweetObj = checkTweet(tweetText)
         if not tweetObj.qualityControl():
             return list()
-        tweetObj.findWords()
         Nsyls = 5 + 2*(self.nLines%2)
         line = tweetObj.checkSylbls(Nsyls)
         if line:
@@ -29,6 +28,7 @@ class checkTweet():
         self.text = text
         self.textWords = list()
         self.nWords = 0
+        self.baseText = self.text
 
     def qualityControl(self):
         self.replaceHashtag()
@@ -59,10 +59,6 @@ class checkTweet():
         else:
             return False
 
-    def findWords(self):
-        self.textWords=self.text.split()
-        self.nWords = len(self.textWords)
-
     def search_delete(self, search_term, string_input):
         string = string_input
         while re.search(search_term, string):
@@ -77,6 +73,11 @@ class checkTweet():
         return ' '.join(string_split_2)
 
     def checkSylbls(self, Nsyls):
+        self.textWords=self.text.split()
+        self.nWords = len(self.textWords)
+        return self.confirmSylsCounts(Nsyls)
+    
+    def confirmSylsCounts(self, Nsyls):
         i = 0
         sylsCount = 0;
         tooHard = False;
@@ -95,7 +96,8 @@ class checkTweet():
         if (sylsCount == Nsyls) and not tooHard:
             return ' '.join(self.textWords[:i])
         else:
-            return ''
+            return list()
+            
             
     def count_syllables(self, word):
         vowels = ['a', 'e', 'i', 'o', 'u']
