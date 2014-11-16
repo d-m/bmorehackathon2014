@@ -1,6 +1,7 @@
 from hyphen import Hyphenator, dict_info 
 from hyphen.dictools import *
 import sys
+import re
 h_en = Hyphenator('en_US')
 
 class buildHaiku():
@@ -31,22 +32,49 @@ class checkTweet():
 
     def qualityControl(self):
         self.replaceHashtag()
-        if not self.retweetCheck():
+        self.remove_at_symbol()
+        self.remove_urls()
+        if self.words_no_vowels():
             return False
-#         do some more checks
         return True
     
     def replaceHashtag(self):
         self.text = self.text.replace('#', 'hashtag ')
 
-    def retweetCheck(self):
-#         check if retweet 
-#           if so return false
-        return True
+    def remove_at_symbol(self):
+        self.text = self.search_delete('@', self.text)
+
+    def remove_urls(self):
+        self.text = self.search_delete('http:', self.text)
+
+    def words_no_vowels(self):
+        string_split = self.text.split()
+        for i in range(len(string_split)):
+            if re.search("([aeiouy]+)",string_split[i]):
+                string_split[i] = True
+            else:
+                string_split[i] = False
+        if False in string_split:
+            return True
+        else:
+            return False
 
     def findWords(self):
         self.textWords=self.text.split()
         self.nWords = len(self.textWords)
+
+    def search_delete(self, search_term, string_input):
+        string = string_input
+        while re.search(search_term, string):
+            string_split = string.split()
+            for i in range(len(string_split)):
+                if re.search(search_term,string_split[i]):
+                    string_split[i] = 'delete1'
+            string = ' '.join(string_split)
+        string_split_2 = string.split()
+        while 'delete1' in string_split_2:
+            string_split_2.remove('delete1')
+        return ' '.join(string_split_2)
 
     def checkSylbls(self, Nsyls):
         i = 0
