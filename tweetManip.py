@@ -48,10 +48,11 @@ class checkTweet():
     def remove_urls(self):
         self.text = search_delete('http:', self.text)
 
-    def retweetCheck(self):
-#         check if retweet 
-#           if so return false
-        return True
+    def retweetCheck(self, string_input):
+        if re.search('RT',string_input):
+            return False
+        else:
+            return True
 
     def findWords(self):
         self.textWords=self.text.split()
