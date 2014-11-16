@@ -6,17 +6,36 @@ class HaikuStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
         super( HaikuStreamer, self ).__init__(*args, **kwargs)
         self.newHaiku = buildHaiku()
+        self.keyWord = ''
+                
+    def setWord_GO(self, word):
+        self.keyWord = word
+        self.get_tweets()   
+
+    def get_tweets(self):
+        if self.newHaiku.nLines == 0:
+            wordlist = self._related_words(self.keyWord)            
+        if self.newHaiku.nLines == 1:
+            wordlist = ['spring', 'summer', 'fall']
+        if self.newHaiku.nLines == 2:
+            wordlist = self._unrelated_words(self.keyWord)
+        wordstring = ', '.join(wordlist)
+        print('search term:')
+        print(wordlist)
+        self.statuses.filter(track=wordstring)
 
     def on_success(self, data):
         if data.has_key('text'):
             result = self.newHaiku.newTweet(data['text'])
             if result:
-                print(result)
                 self.disconnect()
-                
-            
+                if self.newHaiku.nLines == 3: # we are done
+                    print(result)
+                else: # go back for me tweets
+                    self.get_tweets()                    
+                    
     def on_error(self, status_code, data):
-        print status_code, data
+        print 'ERROR', status_code, data
         self.disconnect()
 
     def _related_words(self, word):
@@ -26,9 +45,31 @@ class HaikuStreamer(TwythonStreamer):
         first_max = synlist.index(max(synlist))
         return wn.synsets(word)[first_max].lemma_names()
 
-    def get_tweets(self, word):
-        wordlist = self._related_words(word)
-        wordstring = ', '.join(wordlist)
-        print('search terms:')
-        print(wordlist)
-        self.statuses.filter(track=wordstring)
+    def _unrelated_words(self, word):
+        synlist_all = []
+        for item in self._related_words(word):
+            synlist_all = synlist_all + wn.synsets(item)
+        unique = list(set(synlist_all))
+        synlist_all2 = []
+        for item in unique:
+            synlist_all2 = synlist_all2 + item.lemmas()
+        antonym_list = []
+        for item in synlist_all2:
+            antonym_list = antonym_list + item.antonyms()
+        antonym_list2 = []
+        for item in antonym_list:
+            antonym_list2 = antonym_list2 + item.synset().lemma_names()
+        if antonym_list2:
+            return antonym_list2
+        else:
+            return self._related_words(word)
+
+
+
+
+
+
+
+
+
+
