@@ -7,8 +7,7 @@ _tweetku = {}
 
 // load canned data
 function loadTweetku(data) {
-    console.log(data);
-    _tweetku = data[0];
+    _tweetku = data;
 }
 
 var TweetkuStore = merge(EventEmitter.prototype, {
