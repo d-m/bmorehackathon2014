@@ -56,10 +56,10 @@ class checkTweet():
         while i < self.nWords and sylsCount < Nsyls and not tooHard:
             libreSyls = len(h_en.syllables(self.textWords[i]))
             libreSyls = max(libreSyls, 1)
-            simplSyls = count_syllables(self.textWords[i])
-            if libreSyls == simplSyls[1] or libreSyls == simplSyls[2]:
+            simplSyls = self.count_syllables(self.textWords[i])
+            if libreSyls == simplSyls[0] or libreSyls == simplSyls[1]:
                 sylsCount = sylsCount + libreSyls
-            elif simplSyls[1] == simplSyls[2]:
+            elif simplSyls[0] == simplSyls[1]:
                 sylsCount = sylsCount + simplSyls[1]
             else: # this tweet is too hard
                 tooHard = true
@@ -69,7 +69,7 @@ class checkTweet():
         else:
             return ''
             
-    def count_syllables(word):
+    def count_syllables(self, word):
         vowels = ['a', 'e', 'i', 'o', 'u']
 
         on_vowel = False
@@ -112,4 +112,4 @@ class checkTweet():
         if word[-1] == 'y' and not on_vowel:
             maxsyl += 1
 
-        return minsyl, maxsyl            
+        return minsyl, maxsyl
