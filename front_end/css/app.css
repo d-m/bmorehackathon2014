@@ -1,0 +1,33 @@
+body {
+    background-color: #0BCC7C;
+}
+
+.tweetku {
+    background-color: white;
+    width: 35%;
+    padding: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    -moz-box-shadow: 10px 10px 5px #2D7F5D;
+    -webkit-box-shadow: 10px 10px 5px #2D7F5D;
+    box-shadow: 10px 10px 5px #2D7F5D;
+}
+
+.haiku {
+    margin-bottom: 2em;
+}
+
+.line {
+    font-family: 'Ovo', serif;
+    font-size: 2em;
+    display: block;
+}
+
+.author {
+    text-align: right;
+}
+
+.handle {
+    font-family: 'Italianno', cursive;
+    font-size: 1.5em;
+}
