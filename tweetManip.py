@@ -37,6 +37,8 @@ class checkTweet():
         self.remove_ampersand_words()
         if self.words_no_vowels():
             return False
+        if self.check_at_symbol_other():
+            return False
         return True
     
     def replaceHashtag(self):
@@ -62,6 +64,12 @@ class checkTweet():
             else:
                 string_split[i] = False
         if False in string_split:
+            return True
+        else:
+            return False
+
+    def check_at_symbol_other(self):
+        if re.search('@', self.text):
             return True
         else:
             return False
