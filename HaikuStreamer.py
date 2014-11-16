@@ -29,4 +29,6 @@ class HaikuStreamer(TwythonStreamer):
     def get_tweets(self, word):
         wordlist = self._related_words(word)
         wordstring = ', '.join(wordlist)
+        print('search terms:')
+        print(wordlist)
         self.statuses.filter(track=wordstring)
