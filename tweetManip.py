@@ -80,22 +80,24 @@ class checkTweet():
     def checkSylbls(self, Nsyls):
         forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or']
         finalWords = self.confirmSylsCounts(Nsyls)
-            if any(finalWords[-1] == s for s in forbiddenEnds):
-                return list()
-            
+        print(finalWords)
+        if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
+            return list()
+        return ' '.join(finalWords)
+        
                             
     
     def confirmSylsCounts(self, Nsyls, ):
         textWords = self.text.split()
-        nWords = len(self.textWords)
+        nWords = len(textWords)
         i = 0
         sylsCount = 0;
         tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
-        while i < self.nWords and sylsCount < Nsyls and not tooHard:
-            libreSyls = len(h_en.syllables(self.textWords[i]))
+        while i < nWords and sylsCount < Nsyls and not tooHard:
+            libreSyls = len(h_en.syllables(textWords[i]))
             libreSyls = max(libreSyls, 1)
-            simplSyls = self.count_syllables(self.textWords[i])
+            simplSyls = self.count_syllables(textWords[i])
             if libreSyls == simplSyls[0] or libreSyls == simplSyls[1]:
                 sylsCount = sylsCount + libreSyls
             elif simplSyls[0] == simplSyls[1]:
@@ -104,7 +106,7 @@ class checkTweet():
                 tooHard = True
             i += 1
         if (sylsCount == Nsyls) and not tooHard:
-            return ' '.join(self.textWords[:i])
+            return textWords[:i]
         else:
             return list()
             
