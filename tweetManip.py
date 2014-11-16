@@ -33,7 +33,7 @@ class checkTweet():
         self.remove_symbolWords()
         if self.words_no_vowels():
             return False
-        if self.check_at_symbol_other():
+        if self.check_forbiddenThings():
             return False
         return True
     
@@ -47,9 +47,13 @@ class checkTweet():
             self.text = ' '.join(string_split)
 
     def remove_symbolWords(self):
-        badSymbols = ['http:', 'https:', "\\\\", '&']
+        # remove words with badSymbols below
+        badSymbols = ['http:', 'https:', '&']
         for s in badSymbols:
             self.text = self.search_delete(s, self.text)
+            
+        # remove crazy unicode characters   
+        self.text = unicode(self.text.encode('ascii','ignore'))
             
     def words_no_vowels(self):
         string_split = self.text.split()
@@ -63,11 +67,16 @@ class checkTweet():
         else:
             return False
 
-    def check_at_symbol_other(self):
-        if re.search('@', self.text):
-            return True
-        else:
-            return False
+    def check_forbiddenThings(self):
+        forbiddenThings = ['@', # random syms
+            ' el ', ' la ', ' en ', ' tu ', # spanish
+            ' Et ', ' le ', ' aux ', ' les ', ' de ', ' des ', ' du ', ' il ', ' Elle ',
+            ' ses ', ' sa ', ' ces ', ' cela ', ' est ', ' vous ', ' tous ', ' nous ',
+            ' allez ', ' alons '] # french
+        for s in forbiddenThings:
+            if re.search(s, self.text, re.IGNORECASE):
+                return True
+        return False
 
     def search_delete(self, search_term, string_input):
         string = string_input
