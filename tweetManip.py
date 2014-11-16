@@ -32,12 +32,12 @@ class checkTweet():
 
     def qualityControl(self):
         self.replaceHashtag()
-        if not self.retweetCheck():
+        self.remove_at_symbol()
+        self.remove_urls()
+        if self.retweetCheck():
             return False
 #         do some more checks
         return True
-        self.remove_at_symbol()
-        self.remove_urls()
     
     def replaceHashtag(self):
         self.text = self.text.replace('#', 'hashtag ')
@@ -50,9 +50,9 @@ class checkTweet():
 
     def retweetCheck(self, string_input):
         if re.search('RT',string_input):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def findWords(self):
         self.textWords=self.text.split()
