@@ -16,10 +16,7 @@ class buildHaiku():
         if line:
             self.finalHaiku.append(line)
             self.nLines += 1
-        if self.nLines == 3:
             return self.finalHaiku
-        else:
-            return list()
 
 
 class checkTweet():
@@ -94,7 +91,6 @@ class checkTweet():
     def checkSylbls(self, Nsyls):
         forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or']
         finalWords = self.confirmSylsCounts(Nsyls)
-        print(finalWords)
         if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
             return list()
         return ' '.join(finalWords)               
@@ -107,8 +103,7 @@ class checkTweet():
         tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
         while i < nWords and sylsCount < Nsyls and not tooHard:
-            print(len(textWords[i]))
-            if len(textWords[i]) >= 100 #hyphenator will break and something is crazy
+            if len(textWords[i]) >= 100: #hyphenator will break and something is crazy
                 return list()
             libreSyls = len(self.h_en.syllables(textWords[i]))
             libreSyls = max(libreSyls, 1)
