@@ -2,7 +2,6 @@ from hyphen import Hyphenator, dict_info
 from hyphen.dictools import *
 import sys
 import re
-h_en = Hyphenator('en_US')
 
 class buildHaiku():
     def __init__(self):
@@ -26,13 +25,12 @@ class buildHaiku():
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
         self.text = text
-#         self.baseText = self.text
+        self.h_en = Hyphenator('en_US')
 
     def qualityControl(self):
         self.replaceHashtag()
         self.remove_at_symbol_first()
-        self.remove_urls()
-        self.remove_ampersand_words()
+        self.remove_symbolWords()
         if self.words_no_vowels():
             return False
         if self.check_at_symbol_other():
@@ -48,12 +46,11 @@ class checkTweet():
             del string_split[0]
             self.text = ' '.join(string_split)
 
-    def remove_urls(self):
-        self.text = self.search_delete('http:', self.text)
-
-    def remove_ampersand_words(self):
-        self.text = self.search_delete('&',self.text)
-
+    def remove_symbolWords(self):
+        badSymbols = ['http:', 'https:', "\\\\", '&']
+        for s in badSymbols:
+            self.text = self.search_delete(s, self.text)
+            
     def words_no_vowels(self):
         string_split = self.text.split()
         for i in range(len(string_split)):
@@ -74,8 +71,8 @@ class checkTweet():
 
     def search_delete(self, search_term, string_input):
         string = string_input
+        string_split = string.split()
         while re.search(search_term, string):
-            string_split = string.split()
             for i in range(len(string_split)):
                 if re.search(search_term,string_split[i]):
                     string_split[i] = 'delete1'
@@ -91,9 +88,7 @@ class checkTweet():
         print(finalWords)
         if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
             return list()
-        return ' '.join(finalWords)
-        
-                            
+        return ' '.join(finalWords)               
     
     def confirmSylsCounts(self, Nsyls, ):
         textWords = self.text.split()
@@ -103,7 +98,7 @@ class checkTweet():
         tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
         while i < nWords and sylsCount < Nsyls and not tooHard:
-            libreSyls = len(h_en.syllables(textWords[i]))
+            libreSyls = len(self.h_en.syllables(textWords[i]))
             libreSyls = max(libreSyls, 1)
             simplSyls = self.count_syllables(textWords[i])
             if libreSyls == simplSyls[0] or libreSyls == simplSyls[1]:
