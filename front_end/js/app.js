@@ -8,6 +8,7 @@ TweetkuData.init();
 
 // make mock api call
 TweetkuAPI.getTweetku();
+setInterval(TweetkuAPI.getTweetku, 5000);
 
 // render controller view
 React.render(
