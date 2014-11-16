@@ -30,8 +30,8 @@ class checkTweet():
         self.nWords = 0
 
     def qualityControl(self):
-        self.replaceHashtag(self)
-        if not self.retweetCheck(self)
+        self.replaceHashtag()
+        if not self.retweetCheck():
             return False
 #         do some more checks
         return True
@@ -39,7 +39,7 @@ class checkTweet():
     def replaceHashtag(self):
         self.text = self.text.replace('#', 'hashtag ')
 
-    def retweetCheck(self)
+    def retweetCheck(self):
 #         check if retweet 
 #           if so return false
         return True
@@ -51,17 +51,17 @@ class checkTweet():
     def checkSylbls(self, Nsyls):
         i = 0
         sylsCount = 0;
-        tooHard = false;
+        tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
         while i < self.nWords and sylsCount < Nsyls and not tooHard:
             libreSyls = len(h_en.syllables(self.textWords[i]))
             libreSyls = max(libreSyls, 1)
             simplSyls = count_syllables(self.textWords[i])
-            if libreSyls == simplSyls[1] or libreSyls == simplSyls[2]
+            if libreSyls == simplSyls[1] or libreSyls == simplSyls[2]:
                 sylsCount = sylsCount + libreSyls
-            elif simplSyls[1] == simplSyls[2]
+            elif simplSyls[1] == simplSyls[2]:
                 sylsCount = sylsCount + simplSyls[1]
-            else # this tweet is too hard
+            else: # this tweet is too hard
                 tooHard = true
             i += 1
         if (sylsCount == Nsyls) and not tooHard:
