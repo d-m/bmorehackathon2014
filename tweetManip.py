@@ -62,7 +62,7 @@ class checkTweet():
             elif simplSyls[0] == simplSyls[1]:
                 sylsCount = sylsCount + simplSyls[1]
             else: # this tweet is too hard
-                tooHard = true
+                tooHard = True
             i += 1
         if (sylsCount == Nsyls) and not tooHard:
             return ' '.join(self.textWords[:i])
