@@ -30,8 +30,9 @@ class checkTweet():
 
     def qualityControl(self):
         self.replaceHashtag()
-        self.remove_at_symbol()
+        self.remove_at_symbol_first()
         self.remove_urls()
+        self.remove_ampersand_words()
         if self.words_no_vowels():
             return False
         return True
@@ -39,11 +40,17 @@ class checkTweet():
     def replaceHashtag(self):
         self.text = self.text.replace('#', 'hashtag ')
 
-    def remove_at_symbol(self):
-        self.text = self.search_delete('@', self.text)
+    def remove_at_symbol_first(self):
+        string_split = self.text.split()
+        if re.search('@',string_split[0]):
+            del string_split[0]
+            self.text = ' '.join(string_split)
 
     def remove_urls(self):
         self.text = self.search_delete('http:', self.text)
+
+    def remove_ampersand_words(self):
+        self.text = self.search_delete('&',self.text)
 
     def words_no_vowels(self):
         string_split = self.text.split()
