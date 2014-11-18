@@ -1,4 +1,3 @@
-SPRING--THE SEASON
 coming of spring
 shallow spring
 barely spring
@@ -20,7 +19,6 @@ lingering day
 blossom cool
 deep spring
 passing spring
-SPRING--THE HEAVENS
 spring light
 spring sky
 spring clouds
@@ -40,7 +38,6 @@ haze
 heat shimmer / shimmering heat
 cloudy spring
 blossom haze
-SPRING--THE EARTH
 spring mountains
 spring field
 waters of spring
@@ -57,7 +54,6 @@ melting snow
 melt off
 thin ice
 ice floes
-SPRING--HUMANITY
 spring lantern
 burning the hills
 plow
@@ -74,14 +70,8 @@ soap bubbles
 swing
 spring slug-abed
 spring melancholy
-SPRING--OBSERVANCES
 first day of the horse
-Doll Festival
-Nirvana Ceremony
 pilgrimage
-Buddha's Birthday
-Saigyo's Memorial Day
-SPRING--ANIMALS
 colt, pony
 cats in love
 tadpoles
@@ -102,8 +92,6 @@ young sweetfish
 cherrystone clam
 butterfly
 silkworms
-SPRING--PLANTS
-Note: Traditionally, a renku "blossom verse" is required to include either the word "blossoms"
 plum
 red plum
 camellia
@@ -123,7 +111,6 @@ willow
 willow fluff
 bamboo autumn
 mustard flower
-Japanese-radish flower
 bean flower
 green barley
 spring grasses and forbs
@@ -144,9 +131,6 @@ waterweeds grow
 reed sprouts
 wakame
 nori
-Go to top.
-SUMMER
-SUMMER--THE SEASON
 summer-like
 barley autumn
 short night
@@ -156,7 +140,6 @@ burning hot
 cool
 autumn near
 night autumnal
-SUMMER--THE HEAVENS
 cloud peaks
 summer moon
 south wind
@@ -174,14 +157,12 @@ afterglow
 heat at zenith
 shady side
 drought
-SUMMER--THE EARTH
 summer meadow
 green paddy
 fountainhead, wellspring
 clear spring- water
 dripping spring-water
 waterfall
-SUMMER--HUMANITY
 switching clothes
 one-layered kimono
 thin clothes
@@ -200,14 +181,8 @@ cooling off
 swimming
 fireworks
 cooling on the porch
-SUMMER--OBSERVANCES
-Boy's Day
 festival
-Kanda Festival
-Gion Festival
-Tenma Festival
 half-year's end festival
-SUMMER--ANIMALS
 fawn
 river frog
 little cuckoo
@@ -224,7 +199,6 @@ cicada shell
 fly
 mosquito
 ant
-SUMMER--PLANTS
 summer cherry blossoms
 leafing cherry tree
 peony
@@ -248,7 +222,6 @@ phoenix tree blossoms
 fallen bamboo leaves
 blue flag
 wild iris
-Japanese iris
 sunflower
 pinks
 lily
@@ -266,8 +239,6 @@ green reeds
 burweed, cleavers
 water oats
 duckweed
-AUTUMN
-AUTUMN--THE SEASON
 coming of autumn
 remaining heat
 new coolness
@@ -285,7 +256,6 @@ night chill
 desolate
 autumn deepens, autumn is deep
 fleeting autumn
-AUTUMN--THE HEAVENS
 autumn color
 autumnal clear day
 autumn's voice
@@ -296,7 +266,6 @@ waiting evening
 bright moon, harvest moon
 sixteenth night
 next full moon
-Milky Way
 autumn wind
 first
 windstorm
@@ -306,13 +275,11 @@ fog
 dew
 dew chill
 dew frost
-AUTUMN--THE EARTH
 flower garden
 flowery field
 autumn paddy
 waters of autumn
 first autumnal tide
-AUTUMN--HUMANITY
 new soba
 new rice
 autumn lamplight
@@ -325,12 +292,7 @@ fulling blocks
 reed cutting
 sumo wrestling
 autumn contemplation
-AUTUMN--OBSERVANCES
-Chrysanthemum Festival
-Tanabata
-Bon Festival
 dance
-AUTUMN--ANIMALS
 deer
 migrating birds
 rice sparrows
@@ -345,199 +307,4 @@ goby
 sardines
 mackerel pike
 salmon
-evening clear cicada
-tsukutsukubooshi
-dragonfly
-insects, bugs
-cricket
-bell cricket
-pine cricket
-katydid
-worms cry
-AUTUMN--PLANTS
-rose of sharon
-peach
-pear
-persimmon
-apple
-grapes
-chestnuts
-citron
-red leaves
-maple
-one pawlonia leaf
-willow leaves fall
-nuts and seeds
-Japanese ivy
-banana plant
-tattered bashoo
-orchids
-morning-glory
-cock's comb
-chrysanthemums
-potato
-rice plants
-early rice
-fallen ears
-tattered lotus
-grasses and forbs in bloom
-seeds of grasses and forbs
-withered tips
-bush clover
-pampas grass
-wind in the reeds
-kudzu flowers
-bell flower, Chinese balloon flower
-yellow valerian
-knotgrass
-mushrooms, fungus
-WINTER
-WINTER--THE SEASON
-winter withering
-Indian summer
-close of the year
-the passing year
-New Year's Eve
-the cold time
-short day
-winter night
-cold
-cold
-clear and cold
-freeze
-nearly spring
-Setsubun
-WINTER--THE HEAVENS
-clear winter day
-winter moon
-withering wind
-north wind
-winter shower
-winter rain
-snow pellets
-sleet
-frost
-first snow
-snow
-snowflakes
-WINTER--THE EARTH
-winter mountains
-withered field
-winter paddy
-water dried up
-ice
-icicles
-WINTER--HUMANITY
-quilt
-porridge
-winter seclusion
-charcoal
-fireplace
-small brazier
-hunting
-wicker fishnet
-bonfire
-searching for plum blossoms
-stilts
-New Year's Eve party
-WINTER--OBSERVANCES
-year market
-Bashô's Memorial Day
-Buson's Memorial Day
-WINTER--ANIMALS
-hawk
-cold sparrows
-cold crow
-waterfowl
-wild ducks
-mandarin ducks
-plovers, sand pipers
-grebe
-yellowtail
-blowfish
-cold golden carp
-cold silver carp
-sea cucumber
-oysters
-winter fly
-bed bugs
-WINTER--PLANTS
-early plum blossoms
-flowers out of season
-winter camellia
-sasanqua
-tea flowers
-hermit smartweed
-spearflower
-nandin berries
-tree leaves
-fallen leaves
-winter grove
-cold mums
-narcissus
-withered mums
-withered lotus
-winter greens
-onion
-Japanese radish
-turnip
-winter grasses and forbs
-withered reeds
-withered pampas grass
-withered burweed
-spearflower
-
-THE NEW YEAR
-NEW YEAR--THE SEASON
-New Year
-beginning of spring
-last year
-first day
-Little New Year
-NEW YEAR--THE HEAVENS
-first sun
-first sky
-first calm
-NEW YEAR--THE EARTH
-first Mt. Fuji
-NEW YEAR--HUMANITY
-spring kimono
-mulled rice wine
-zooni
-pine decorations
-sacred rope
-Isle of the Blessed
-mirror rice cakes
-take down pine
-first bath
-first dream
-New Year's visits
-New Year's money
-first greeting
-first calligraphy
-first market
-first load
-first purchase
-card games
-battledore and shuttlecock
-hand balls
-sacred arrow
-street comedians
-lion dance
-NEW YEAR--OBSERVANCES
-first water
-seven herbs
-picking young greens
-burning ornaments
-servants' day
-first visit
-NEW YEAR--ANIMALS
-first sparrows twittering
-first raven cry
-first rooster crowing
-NEW YEAR--PLANTS
-ferns
-yuzuriha
-seagrape
-pheasant's eye
-shepherd's purse
+evening clear
