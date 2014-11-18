@@ -3,7 +3,6 @@ shallow spring
 barely spring
 returning cold
 still cold
-spring-like
 bugs come out
 spring equinox
 spring day
@@ -68,10 +67,13 @@ balloon
 pinwheel
 soap bubbles
 swing
-spring slug-abed
 spring melancholy
 first day of the horse
+doll festival
+nirvana ceremony
 pilgrimage
+buddha's birthday
+saigyo's memorial day
 colt, pony
 cats in love
 tadpoles
@@ -131,7 +133,8 @@ waterweeds grow
 reed sprouts
 wakame
 nori
-summer-like
+go to top.
+summer
 barley autumn
 short night
 hot
@@ -160,11 +163,8 @@ drought
 summer meadow
 green paddy
 fountainhead, wellspring
-clear spring- water
-dripping spring-water
 waterfall
 switching clothes
-one-layered kimono
 thin clothes
 summer kimono
 new tea
@@ -181,8 +181,11 @@ cooling off
 swimming
 fireworks
 cooling on the porch
+boy's day
 festival
-half-year's end festival
+kanda festival
+gion festival
+tenma festival
 fawn
 river frog
 little cuckoo
@@ -222,6 +225,7 @@ phoenix tree blossoms
 fallen bamboo leaves
 blue flag
 wild iris
+japanese iris
 sunflower
 pinks
 lily
@@ -239,6 +243,7 @@ green reeds
 burweed, cleavers
 water oats
 duckweed
+autumn
 coming of autumn
 remaining heat
 new coolness
@@ -266,6 +271,7 @@ waiting evening
 bright moon, harvest moon
 sixteenth night
 next full moon
+milky way
 autumn wind
 first
 windstorm
@@ -292,6 +298,9 @@ fulling blocks
 reed cutting
 sumo wrestling
 autumn contemplation
+chrysanthemum festival
+tanabata
+bon festival
 dance
 deer
 migrating birds
@@ -307,4 +316,182 @@ goby
 sardines
 mackerel pike
 salmon
-evening clear
+evening clear cicada
+tsukutsukubooshi
+dragonfly
+insects, bugs
+cricket
+bell cricket
+pine cricket
+katydid
+worms cry
+rose of sharon
+peach
+pear
+persimmon
+apple
+grapes
+chestnuts
+citron
+red leaves
+maple
+one pawlonia leaf
+willow leaves fall
+nuts and seeds
+japanese ivy
+banana plant
+tattered bashoo
+orchids
+cock's comb
+chrysanthemums
+potato
+rice plants
+early rice
+fallen ears
+tattered lotus
+grasses and forbs in bloom
+seeds of grasses and forbs
+withered tips
+bush clover
+pampas grass
+wind in the reeds
+kudzu flowers
+bell flower, chinese balloon flower
+yellow valerian
+knotgrass
+mushrooms, fungus
+winter
+winter withering
+indian summer
+close of the year
+the passing year
+new year's eve
+the cold time
+short day
+winter night
+cold
+cold
+clear and cold
+freeze
+nearly spring
+setsubun
+clear winter day
+winter moon
+withering wind
+north wind
+winter shower
+winter rain
+snow pellets
+sleet
+frost
+first snow
+snow
+snowflakes
+winter mountains
+withered field
+winter paddy
+water dried up
+ice
+icicles
+quilt
+porridge
+winter seclusion
+charcoal
+fireplace
+small brazier
+hunting
+wicker fishnet
+bonfire
+searching for plum blossoms
+stilts
+new year's eve party
+year market
+bashô's memorial day
+buson's memorial day
+hawk
+cold sparrows
+cold crow
+waterfowl
+wild ducks
+mandarin ducks
+plovers, sand pipers
+grebe
+yellowtail
+blowfish
+cold golden carp
+cold silver carp
+sea cucumber
+oysters
+winter fly
+bed bugs
+early plum blossoms
+flowers out of season
+winter camellia
+sasanqua
+tea flowers
+hermit smartweed
+spearflower
+nandin berries
+tree leaves
+fallen leaves
+winter grove
+cold mums
+narcissus
+withered mums
+withered lotus
+winter greens
+onion
+japanese radish
+turnip
+winter grasses and forbs
+withered reeds
+withered pampas grass
+withered burweed
+spearflower
+the new year
+new year
+beginning of spring
+last year
+first day
+little new year
+first sun
+first sky
+first calm
+first mt. fuji
+spring kimono
+mulled rice wine
+zooni
+pine decorations
+sacred rope
+isle of the blessed
+mirror rice cakes
+take down pine
+first bath
+first dream
+new year's visits
+new year's money
+first greeting
+first calligraphy
+first market
+first load
+first purchase
+card games
+battledore and shuttlecock
+hand balls
+sacred arrow
+street comedians
+lion dance
+first water
+seven herbs
+picking young greens
+burning ornaments
+servants' day
+first visit
+first sparrows twittering
+first raven cry
+first rooster crowing
+ferns
+yuzuriha
+seagrape
+pheasant's eye
+shepherd's purse
