@@ -1,6 +1,7 @@
 from twython import TwythonStreamer
 from nltk.corpus import wordnet as wn
 from tweetManip import buildHaiku
+import copy
 
 class HaikuStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
@@ -13,15 +14,13 @@ class HaikuStreamer(TwythonStreamer):
         self.get_tweets()   
 
     def get_tweets(self):
-        if self.newHaiku.nLines == 0:
-            wordlist = self._related_words(self.keyWord)            
-        if self.newHaiku.nLines == 1:
-            wordlist = ['spring', 'summer', 'fall']
-        if self.newHaiku.nLines == 2:
-            wordlist = self._unrelated_words(self.keyWord)
+        wordlist = self._related_words(self.keyWord)
+        wordlist.append(u'fall')
+        wordlist.extend(self._unrelated_words(self.keyWord))
         wordstring = ', '.join(wordlist)
-        print('search term:')
-        print(wordlist)
+        wordstring = wordstring.replace('_', ' ')
+        print('search terms:')
+        print(wordstring)
         self.statuses.filter(track=wordstring)
 
     def on_success(self, data):
@@ -29,10 +28,7 @@ class HaikuStreamer(TwythonStreamer):
             result = self.newHaiku.newTweet(data['text'])
             if result:
                 self.disconnect()
-                if self.newHaiku.nLines == 3: # we are done
-                    print(result)
-                else: # go back for me tweets
-                    self.get_tweets()                    
+                print(result)
                     
     def on_error(self, status_code, data):
         print 'ERROR', status_code, data
@@ -41,9 +37,10 @@ class HaikuStreamer(TwythonStreamer):
     def _related_words(self, word):
         synlist = []
         for synset in wn.synsets(word):
-            synlist.append(len(synset.lemma_names()))
-        first_max = synlist.index(max(synlist))
-        return wn.synsets(word)[first_max].lemma_names()
+            synlist.append(len(synset.lemma_names()))     
+        first_max = synlist.index(max(synlist)) # the  group with the most synonyms
+        outputList = copy.copy(wn.synsets(word)[first_max].lemma_names())
+        return outputList
 
     def _unrelated_words(self, word):
         synlist_all = []
