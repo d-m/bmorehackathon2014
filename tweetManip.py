@@ -7,6 +7,7 @@ class buildHaiku():
     def __init__(self):
         self.finalHaiku = list()
         self.nLines = 0
+        
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
         if not tweetObj.qualityControl():
