@@ -5,20 +5,25 @@ import copy
 
 class HaikuStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
-        super( HaikuStreamer, self ).__init__(*args, **kwargs)
+        super(HaikuStreamer, self ).__init__(*args, **kwargs)
+        self.seasonWordPath = 'testList.txt'
         self.newHaiku = buildHaiku()
         self.keyWord = ''
+        
                 
     def setWord_GO(self, word):
         self.keyWord = word
         self.get_tweets()   
 
     def get_tweets(self):
-        wordlist = self._related_words(self.keyWord)
-        wordlist.append(u'fall')
-        wordlist.extend(self._unrelated_words(self.keyWord))
+        syns = self._related_words(self.keyWord)
+        seasons = open(self.seasonWordPath).read().splitlines()
+        ants = self._unrelated_words(self.keyWord)
+        wordlist = syns + seasons + ants
         wordstring = ', '.join(wordlist)
         wordstring = wordstring.replace('_', ' ')
+        
+        
         print('search terms:')
         print(wordstring)
         self.statuses.filter(track=wordstring)
@@ -34,17 +39,46 @@ class HaikuStreamer(TwythonStreamer):
         print 'ERROR', status_code, data
         self.disconnect()
 
-    def _related_words(self, word):
+    def buildManyWords(self, word, synonyms, length):
+        if not synonyms:
+            finalWords = list(self._unrelated_words(word))
+        else:
+            finalWords = [word]
+        Nlast = 0
+        desperation = 0
+        while length > Nlast
+            tempWords = []
+            for currentWord in finalWords:
+                tempWords = tempWords + self._related_words(currentWord, desperation)
+            if tempWords == list():
+                print 'only could find ', len(finalWords), 'words'
+                return finalWords        
+            print'****TEMP WORDS WERE:', tempWords
+            finalWords.extend(tempWords)
+            finalWords = list(set(finalWords))
+            if Nlast == len(finalWords):
+                desperation = desperation + 1
+            else:
+                Nlast = len(finalWords)
+
+
+    def _related_words(self, word, groupInd):
+        if len(wn.synsets(word)) == 0:
+            return word
         synlist = []
         for synset in wn.synsets(word):
-            synlist.append(len(synset.lemma_names()))     
-        first_max = synlist.index(max(synlist)) # the  group with the most synonyms
-        outputList = copy.copy(wn.synsets(word)[first_max].lemma_names())
+            synlist.append(len(synset.lemma_names()))         
+        sortInd = [i[0] for i in sorted(enumerate(synlist), key=lambda x:x[1])]
+        sortIndIndex = len(sortInd) - groupInd
+        if sortIndIndex < 0:
+            return list()
+        groupInd = sortInd[sortIndIndex]
+        outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
         return outputList
 
     def _unrelated_words(self, word):
         synlist_all = []
-        for item in self._related_words(word):
+        for item in self._related_words(word, 0):
             synlist_all = synlist_all + wn.synsets(item)
         unique = list(set(synlist_all))
         synlist_all2 = []
