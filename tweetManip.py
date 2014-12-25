@@ -9,78 +9,40 @@ import copy
 class buildHaiku():
     def __init__(self):
         self.finalHaiku = list()
-        self.nLines = 0
+        self.seasonWordPath = 'testList.txt'
+        self.keyWord = relatedWords()
+        self.listLength = 30
+        self.Nseven = 0
+        self.Nfive = 0
+        
+    def setWord(self, wordText):
+        self.keyWord = relatedWords(wordText)
+        syns = self.keyWord.buildWordList(True, self.listLength)
+        syns = [w.replace('_', ' ') for w in syns]
+        ants = self.keyWord.buildWordList(False, self.listLength)
+        ants = [w.replace('_', ' ') for w in ants]        
+        seasons = open(self.seasonWordPath).read().splitlines()
+        seasons = [w.replace('_', ' ') for w in seasons]
+        return syns + ants + seasons
         
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
-        if not tweetObj.qualityControl():
+        if not tweetObj.qualityControl()
             return list()
-        Nsyls = 5 + 2*(self.nLines%2)
-        line = tweetObj.checkSylbls(Nsyls)
-        if line:
-            self.finalHaiku.append(line)
-            self.nLines += 1
-            return self.finalHaiku
+        sevenSyl = tweetObj.checkSylbls(7);
+        if sevenSyl # it can have 7 syls
+            self.classifyTweet(tweetObj, 7)
+            if sevenSylRslt # it is valid, we use it as zeven
+                return sevenSylRslt
+        fiveSyl = tweetObj.checkSylbls(5);
+        if fiveSyl: # check if it works as a five syl line
+            return self.classifyTweet(tweetObj, 5)
 
-class relatedWords():
-    def __init__(self, centerWord = 'good'):
-        self.centerWord = centerWord
-        
-    def buildWordList(self, synonyms, length):
-        if not synonyms:
-            finalWord = self._unrelated_word(self.centerWord)
-        else:
-            finalWord = self.centerWord
-        Nlast = 0
-        desperation = 0
-        Ntries = 0
-        thisTry = []
-        while length > len(thisTry):
-            if Ntries > desperation:
-                desperation = desperation + 1
-                Ntries = 1
-                if desperation > 5:
-                    print '5 recursions only yeilded: ', len(thisTry), ' words!'
-                    break
-            else:
-                Ntries = Ntries + 1
-            thisTry = self.related_words(finalWord, 0, desperation)
-        return thisTry
-        
-    def related_words(self, word, curDepth, targetDepth):
-        Nsynsets = len(wn.synsets(word))
-        if Nsynsets == 0:
-            return word 
-        groupInd = randint(0, Nsynsets -1)
-        outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
-        if curDepth == targetDepth:
-            return outputList
-        else:
-            finalList = []
-            for curWord in outputList:
-                finalList = finalList + self.related_words(curWord, curDepth+1, targetDepth)
-            return list(set(finalList))
+    def classifyTweet(self, tweetObj, Nsyls):
+    #returns empty if tweet catorgy is already filled, otherwise retruns the tweet
 
-    def _unrelated_word(self, word):
-        synlist_all = []
-        for item in self.related_words(word, 0, 0):
-            synlist_all = synlist_all + wn.synsets(item)
-        unique = list(set(synlist_all))
-        synlist_all2 = []
-        for item in unique:
-            synlist_all2 = synlist_all2 + item.lemmas()
-        antonym_list = []
-        for item in synlist_all2:
-            antonym_list = antonym_list + item.antonyms()
-        antonym_list2 = list()
-        for item in antonym_list:
-            antonym_list2 = antonym_list2 + item.synset().lemma_names()
-        if antonym_list2:
-            return antonym_list2[0]
-        else:
-            return word
-
-
+            
+            
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
@@ -88,7 +50,7 @@ class checkTweet():
         self.h_en = Hyphenator('en_US')
 
     def qualityControl(self):
-        self.replaceHashtag()
+        self.replaceText()
         self.remove_at_symbol_first()
         self.remove_symbolWords()
         if self.words_no_vowels():
@@ -97,7 +59,7 @@ class checkTweet():
             return False
         return True
     
-    def replaceHashtag(self):
+    def replaceText(self):
         self.text = self.text.replace('#', 'hashtag ')
 
     def remove_at_symbol_first(self):
@@ -183,7 +145,6 @@ class checkTweet():
         else:
             return list()
             
-            
     def count_syllables(self, word):
         vowels = ['a', 'e', 'i', 'o', 'u']
 
@@ -228,3 +189,63 @@ class checkTweet():
             maxsyl += 1
 
         return minsyl, maxsyl
+
+        
+class relatedWords():
+    def __init__(self, centerWord = 'good'):
+        self.centerWord = centerWord
+        
+    def buildWordList(self, synonyms, length):
+        if not synonyms:
+            finalWord = self._unrelated_word(self.centerWord)
+        else:
+            finalWord = self.centerWord
+        Nlast = 0
+        desperation = 0
+        Ntries = 0
+        thisTry = []
+        while length > len(thisTry):
+            if Ntries > desperation:
+                desperation = desperation + 1
+                Ntries = 1
+                if desperation > 5:
+                    print '5 recursions only yeilded: ', len(thisTry), ' words!'
+                    break
+            else:
+                Ntries = Ntries + 1
+            thisTry = self.related_words(finalWord, 0, desperation)
+        return thisTry
+        
+    def related_words(self, word, curDepth, targetDepth):
+        Nsynsets = len(wn.synsets(word))
+        if Nsynsets == 0:
+            return word 
+        groupInd = randint(0, Nsynsets -1)
+        outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
+        if curDepth == targetDepth:
+            return outputList
+        else:
+            finalList = []
+            for curWord in outputList:
+                finalList = finalList + self.related_words(curWord, curDepth+1, targetDepth)
+            return list(set(finalList))
+
+    def _unrelated_word(self, word):
+        synlist_all = []
+        for item in self.related_words(word, 0, 0):
+            synlist_all = synlist_all + wn.synsets(item)
+        unique = list(set(synlist_all))
+        synlist_all2 = []
+        for item in unique:
+            synlist_all2 = synlist_all2 + item.lemmas()
+        antonym_list = []
+        for item in synlist_all2:
+            antonym_list = antonym_list + item.antonyms()
+        antonym_list2 = list()
+        for item in antonym_list:
+            antonym_list2 = antonym_list2 + item.synset().lemma_names()
+        if antonym_list2:
+            return antonym_list2[0]
+        else:
+            return word
+
