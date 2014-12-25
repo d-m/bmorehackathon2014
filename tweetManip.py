@@ -1,7 +1,10 @@
+from nltk.corpus import wordnet as wn
+from random import randint
 from hyphen import Hyphenator, dict_info 
 from hyphen.dictools import *
 import sys
 import re
+import copy
 
 class buildHaiku():
     def __init__(self):
@@ -18,6 +21,65 @@ class buildHaiku():
             self.finalHaiku.append(line)
             self.nLines += 1
             return self.finalHaiku
+
+class relatedWords():
+    def __init__(self, centerWord = 'good'):
+        self.centerWord = centerWord
+        
+    def buildWordList(self, synonyms, length):
+        if not synonyms:
+            finalWord = self._unrelated_word(self.centerWord)
+        else:
+            finalWord = self.centerWord
+        Nlast = 0
+        desperation = 0
+        Ntries = 0
+        thisTry = []
+        while length > len(thisTry):
+            if Ntries > desperation:
+                desperation = desperation + 1
+                Ntries = 1
+                if desperation > 5:
+                    print '5 recursions only yeilded: ', len(thisTry), ' words!'
+                    break
+            else:
+                Ntries = Ntries + 1
+            thisTry = self.related_words(finalWord, 0, desperation)
+        return thisTry
+        
+    def related_words(self, word, curDepth, targetDepth):
+        Nsynsets = len(wn.synsets(word))
+        if Nsynsets == 0:
+            return word 
+        groupInd = randint(0, Nsynsets -1)
+        outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
+        if curDepth == targetDepth:
+            return outputList
+        else:
+            finalList = []
+            for curWord in outputList:
+                finalList = finalList + self.related_words(curWord, curDepth+1, targetDepth)
+            return list(set(finalList))
+
+    def _unrelated_word(self, word):
+        synlist_all = []
+        for item in self.related_words(word, 0, 0):
+            synlist_all = synlist_all + wn.synsets(item)
+        unique = list(set(synlist_all))
+        synlist_all2 = []
+        for item in unique:
+            synlist_all2 = synlist_all2 + item.lemmas()
+        antonym_list = []
+        for item in synlist_all2:
+            antonym_list = antonym_list + item.antonyms()
+        antonym_list2 = list()
+        for item in antonym_list:
+            antonym_list2 = antonym_list2 + item.synset().lemma_names()
+        if antonym_list2:
+            return antonym_list2[0]
+        else:
+            return word
+
 
 
 class checkTweet():
