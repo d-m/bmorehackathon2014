@@ -12,8 +12,12 @@ class buildHaiku():
         self.seasonWordPath = 'testList.txt'
         self.keyWord = relatedWords()
         self.listLength = 30
-        self.Nseven = 0
-        self.Nfive = 0
+        self.line1 = []
+        self.line2 = []
+        self.line3 = []
+        self.synsFound = False
+        self.antFound = False
+        self.seasonFound = False
         
     def setWord(self, wordText):
         self.keyWord = relatedWords(wordText)
@@ -29,24 +33,46 @@ class buildHaiku():
         tweetObj = checkTweet(tweetText)
         if not tweetObj.qualityControl()
             return list()
-        sevenSyl = tweetObj.checkSylbls(7);
-        if sevenSyl # it can have 7 syls
-            self.classifyTweet(tweetObj, 7)
-            if sevenSylRslt # it is valid, we use it as zeven
-                return sevenSylRslt
-        fiveSyl = tweetObj.checkSylbls(5);
-        if fiveSyl: # check if it works as a five syl line
-            return self.classifyTweet(tweetObj, 5)
+        if not self.classifyTweet(tweetObj.checkSylbls(7), 7):
+            self.classifyTweet(tweetObj.checkSylbls(5), 5)
+        if self.line1 & self.line2 & self.line3:
+            return self.line1 + self.line2 + self.line3
+        else:
+            return list()    
 
-    def classifyTweet(self, tweetObj, Nsyls):
-    #returns empty if tweet catorgy is already filled, otherwise retruns the tweet
-
+    def classifyTweet(self, tweetWordList, Nsyls):
+    if not tweetWordList
+        return False
+    if list(set(syns) & set(tweetWordList)):
+        if Nsyls == 7 and not self.line2:
+            self.line2 = tweetObj.text
+        elif Nsyls == 5 and not self.line1:
+            self.line1 = tweetObj.text
+    if list(set(ants) & set(tweetWordList)):
+        if Nsyls == 7 and not self.line2:
+            self.line2 = tweetObj.text
+        elif Nsyls == 5 and not self.line3:
+            self.line3 = tweetObj.text
+    if list(set(seasons) & set(tweetWordList)):
+        if Nsyls == 7 and not self.line2:
+            self.line2 = tweetObj.text
+        elif Nsyls == 5 and not self.line1:
+            self.line1 = tweetObj.text
+        elif Nsyls == 5 and not self.line3:
+            self.line3 = tweetObj.text
+# THE ABOVE LOGIC ISN'T SOUND. 
+# THE SAME TYPE COULD FILL MULTIPLE LINES AND, IN TURN, ONE TYPE CAN GET "LOCKED OUT"
+# SEASONS and ANTS COULD FILL THE 1ST TWO LINES
+# SEASONS CAN FILL ANY SET OF TWO, OR EVEN THREE, LINES
+# NEED TO USE THE FOUND VARIABLES ABOVE
+# ALSO WE NEED TO RETURN TRUE IF ANY OF THEESE CONDITIONALS ARE TRUE         
             
             
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
         self.text = text
+        self.textWords = self.text.split()
         self.h_en = Hyphenator('en_US')
 
     def qualityControl(self):
@@ -118,21 +144,20 @@ class checkTweet():
         finalWords = self.confirmSylsCounts(Nsyls)
         if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
             return list()
-        return ' '.join(finalWords)               
+        return finalWords               
     
     def confirmSylsCounts(self, Nsyls):
-        textWords = self.text.split()
-        nWords = len(textWords)
+        nWords = len(self.textWords)
         i = 0
         sylsCount = 0;
         tooHard = False;
         # loop until the end of the word list, we count Nsyls or can't figure out a word
         while i < nWords and sylsCount < Nsyls and not tooHard:
-            if len(textWords[i]) >= 100: #hyphenator will break and something is crazy
+            if len(self.textWords[i]) >= 100: #hyphenator will break and something is crazy
                 return list()
-            libreSyls = len(self.h_en.syllables(textWords[i]))
+            libreSyls = len(h_en.syllables(self.textWords[i]))
             libreSyls = max(libreSyls, 1)
-            simplSyls = self.count_syllables(textWords[i])
+            simplSyls = self.count_syllables(self.textWords[i])
             if libreSyls == simplSyls[0] or libreSyls == simplSyls[1]:
                 sylsCount = sylsCount + libreSyls
             elif simplSyls[0] == simplSyls[1]:
@@ -141,7 +166,7 @@ class checkTweet():
                 tooHard = True
             i += 1
         if (sylsCount == Nsyls) and not tooHard:
-            return textWords[:i]
+            return self.textWords[:i]
         else:
             return list()
             
