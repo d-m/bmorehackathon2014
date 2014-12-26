@@ -12,26 +12,28 @@ class buildHaiku():
         self.seasonWordPath = 'testList.txt'
         self.keyWord = relatedWords()
         self.listLength = 30
+        self.syns = []
+        self.ants = []
+        self.seasons = []
         self.line1 = []
         self.line2 = []
         self.line3 = []
         self.synsFound = False
-        self.antFound = False
-        self.seasonFound = False
+        self.antsFound = False
+        self.seasonsFound = False
         
     def setWord(self, wordText):
         self.keyWord = relatedWords(wordText)
         syns = self.keyWord.buildWordList(True, self.listLength)
-        syns = [w.replace('_', ' ') for w in syns]
+        self.syns = [w.replace('_', ' ') for w in syns]
         ants = self.keyWord.buildWordList(False, self.listLength)
-        ants = [w.replace('_', ' ') for w in ants]        
-        seasons = open(self.seasonWordPath).read().splitlines()
-        seasons = [w.replace('_', ' ') for w in seasons]
-        return syns + ants + seasons
+        self.ants = [w.replace('_', ' ') for w in ants]        
+        self.seasons = open(self.seasonWordPath).read().splitlines()
+        return self.syns + self.ants + self.seasons
         
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
-        if not tweetObj.qualityControl()
+        if not tweetObj.qualityControl():
             return list()
         if not self.classifyTweet(tweetObj.checkSylbls(7), 7):
             self.classifyTweet(tweetObj.checkSylbls(5), 5)
@@ -41,33 +43,42 @@ class buildHaiku():
             return list()    
 
     def classifyTweet(self, tweetWordList, Nsyls):
-    if not tweetWordList
-        return False
-    if list(set(syns) & set(tweetWordList)):
-        if Nsyls == 7 and not self.line2:
-            self.line2 = tweetObj.text
-        elif Nsyls == 5 and not self.line1:
-            self.line1 = tweetObj.text
-    if list(set(ants) & set(tweetWordList)):
-        if Nsyls == 7 and not self.line2:
-            self.line2 = tweetObj.text
-        elif Nsyls == 5 and not self.line3:
-            self.line3 = tweetObj.text
-    if list(set(seasons) & set(tweetWordList)):
-        if Nsyls == 7 and not self.line2:
-            self.line2 = tweetObj.text
-        elif Nsyls == 5 and not self.line1:
-            self.line1 = tweetObj.text
-        elif Nsyls == 5 and not self.line3:
-            self.line3 = tweetObj.text
-# THE ABOVE LOGIC ISN'T SOUND. 
-# THE SAME TYPE COULD FILL MULTIPLE LINES AND, IN TURN, ONE TYPE CAN GET "LOCKED OUT"
-# SEASONS and ANTS COULD FILL THE 1ST TWO LINES
-# SEASONS CAN FILL ANY SET OF TWO, OR EVEN THREE, LINES
-# NEED TO USE THE FOUND VARIABLES ABOVE
-# ALSO WE NEED TO RETURN TRUE IF ANY OF THEESE CONDITIONALS ARE TRUE         
-            
-            
+        if not tweetWordList:
+            return False
+        # it is a synonym
+        if list(set(syns) & set(tweetWordList)) and not self.synsFound:
+            if Nsyls == 7 and not self.line2:
+                self.line2 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line1:
+                self.line1 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line3:
+                self.line3 = tweetObj.text
+                return True
+        # it is an antonym
+        if list(set(ants) & set(tweetWordList)) and not self.antsFound:
+            if Nsyls == 7 and not self.line2:
+                self.line2 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line3:
+                self.line3 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line1:
+                self.line1 = tweetObj.text
+                return True
+        # it is an season
+        if list(set(seasons) & set(tweetWordList)) and not self.seasonsFound:
+            if Nsyls == 7 and not self.line2:
+                self.line2 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line1:
+                self.line1 = tweetObj.text
+                return True
+            elif Nsyls == 5 and not self.line3:
+                self.line3 = tweetObj.text
+                return True
+        return False        
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
