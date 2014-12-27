@@ -11,7 +11,7 @@ class buildHaiku():
         self.finalHaiku = list()
         self.seasonWordPath = 'testList.txt'
         self.keyWord = relatedWords()
-        self.listLength = 30
+        self.listLength = 5
         self.syns = []
         self.ants = []
         self.seasons = []
@@ -37,7 +37,7 @@ class buildHaiku():
             return list()
         if not self.classifyTweet(tweetObj.checkSylbls(7), 7):
             self.classifyTweet(tweetObj.checkSylbls(5), 5)
-        if self.line1 & self.line2 & self.line3:
+        if self.line1 and self.line2 and self.line3:
             return self.line1 + self.line2 + self.line3
         else:
             return list()    
@@ -46,7 +46,7 @@ class buildHaiku():
         if not tweetWordList:
             return False
         # it is a synonym
-        if list(set(syns) & set(tweetWordList)) and not self.synsFound:
+        if list(set(self.syns) & set(tweetWordList)) and not self.synsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetObj.text
                 return True
@@ -57,7 +57,7 @@ class buildHaiku():
                 self.line3 = tweetObj.text
                 return True
         # it is an antonym
-        if list(set(ants) & set(tweetWordList)) and not self.antsFound:
+        if list(set(self.ants) & set(tweetWordList)) and not self.antsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetObj.text
                 return True
@@ -68,7 +68,7 @@ class buildHaiku():
                 self.line1 = tweetObj.text
                 return True
         # it is an season
-        if list(set(seasons) & set(tweetWordList)) and not self.seasonsFound:
+        if list(set(self.seasons) & set(tweetWordList)) and not self.seasonsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetObj.text
                 return True
@@ -82,73 +82,52 @@ class buildHaiku():
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
-        self.text = text
-        self.textWords = self.text.split()
+        self.textWords = text.split()
         self.h_en = Hyphenator('en_US')
+        self.badSymbols = ['http:', 'https:', '&']
+        self.forbiddenThings = ['@'] # random syms
+        self.forbiddenWords = [' el ', ' la ', ' en ', ' tu ', # spanish
+            ' Et ', ' le ', ' aux ', ' les ', ' de ', ' des ', ' du ', ' il ', ' Elle ',
+            ' ses ', ' sa ', ' ces ', ' cela ', ' est ', ' vous ', ' tous ', ' nous ',
+            ' allez ', ' alons '] # french
 
     def qualityControl(self):
         self.replaceText()
         self.remove_at_symbol_first()
         self.remove_symbolWords()
-        if self.words_no_vowels():
-            return False
-        if self.check_forbiddenThings():
+        if self.words_no_vowels() or self.check_forbiddenThings():
             return False
         return True
     
     def replaceText(self):
-        self.text = self.text.replace('#', 'hashtag ')
+        self.textWords = [w.replace('#', 'hashtag ') for w in self.textWords]
 
     def remove_at_symbol_first(self):
-        string_split = self.text.split()
-        if re.search('@',string_split[0]):
-            del string_split[0]
-            self.text = ' '.join(string_split)
+        if re.search('@', self.textWords[0]):
+            del self.textWords[0]
 
     def remove_symbolWords(self):
-        # remove words with badSymbols below
-        badSymbols = ['http:', 'https:', '&']
-        for s in badSymbols:
-            self.text = self.search_delete(s, self.text)
-            
-        # remove crazy unicode characters   
-        self.text = unicode(self.text.encode('ascii','ignore'))
+        # remove words with badSymbols and unicode chars
+        for i, word in enumerate(self.textWords):
+                self.textWords[i] = unicode(word.encode('ascii','ignore'))
+                for s in self.badSymbols:
+                    if re.search(s, word):
+                        del self.textWords[i]
             
     def words_no_vowels(self):
-        string_split = self.text.split()
-        for i in range(len(string_split)):
-            if re.search("([aeiouy]+)",string_split[i]):
-                string_split[i] = True
-            else:
-                string_split[i] = False
-        if False in string_split:
-            return True
-        else:
-            return False
-
-    def check_forbiddenThings(self):
-        forbiddenThings = ['@', # random syms
-            ' el ', ' la ', ' en ', ' tu ', # spanish
-            ' Et ', ' le ', ' aux ', ' les ', ' de ', ' des ', ' du ', ' il ', ' Elle ',
-            ' ses ', ' sa ', ' ces ', ' cela ', ' est ', ' vous ', ' tous ', ' nous ',
-            ' allez ', ' alons '] # french
-        for s in forbiddenThings:
-            if re.search(s, self.text, re.IGNORECASE):
+        for word in self.textWords:
+            if not re.search("([aeiouy]+)", word):
                 return True
         return False
 
-    def search_delete(self, search_term, string_input):
-        string = string_input
-        string_split = string.split()
-        while re.search(search_term, string):
-            for i in range(len(string_split)):
-                if re.search(search_term,string_split[i]):
-                    string_split[i] = 'delete1'
-            string = ' '.join(string_split)
-        string_split_2 = string.split()
-        while 'delete1' in string_split_2:
-            string_split_2.remove('delete1')
-        return ' '.join(string_split_2)
+    def check_forbiddenThings(self):
+        for s in self.forbiddenThings:
+            if any([re.search(s, word) for word in self.textWords]):
+                return True
+        for s in self.forbiddenWords:                
+            if any([re.search('^'+s+'$', word, re.IGNORECASE) for word in self.textWords]):
+                return True
+        return False
 
     def checkSylbls(self, Nsyls):
         forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or']
@@ -166,7 +145,7 @@ class checkTweet():
         while i < nWords and sylsCount < Nsyls and not tooHard:
             if len(self.textWords[i]) >= 100: #hyphenator will break and something is crazy
                 return list()
-            libreSyls = len(h_en.syllables(self.textWords[i]))
+            libreSyls = len(self.h_en.syllables(self.textWords[i]))
             libreSyls = max(libreSyls, 1)
             simplSyls = self.count_syllables(self.textWords[i])
             if libreSyls == simplSyls[0] or libreSyls == simplSyls[1]:
@@ -249,10 +228,10 @@ class relatedWords():
                     break
             else:
                 Ntries = Ntries + 1
-            thisTry = self.related_words(finalWord, 0, desperation)
-        return thisTry
+            thisTry = self._related_words(finalWord, 0, desperation)
+        return thisTry[:length]
         
-    def related_words(self, word, curDepth, targetDepth):
+    def _related_words(self, word, curDepth, targetDepth):
         Nsynsets = len(wn.synsets(word))
         if Nsynsets == 0:
             return word 
@@ -263,12 +242,12 @@ class relatedWords():
         else:
             finalList = []
             for curWord in outputList:
-                finalList = finalList + self.related_words(curWord, curDepth+1, targetDepth)
+                finalList = finalList + self._related_words(curWord, curDepth+1, targetDepth)
             return list(set(finalList))
 
     def _unrelated_word(self, word):
         synlist_all = []
-        for item in self.related_words(word, 0, 0):
+        for item in self._related_words(word, 0, 0):
             synlist_all = synlist_all + wn.synsets(item)
         unique = list(set(synlist_all))
         synlist_all2 = []
