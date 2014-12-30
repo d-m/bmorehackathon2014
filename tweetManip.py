@@ -21,7 +21,7 @@ class buildHaiku():
         self.synsFound = False
         self.antsFound = False
         self.seasonsFound = False
-        
+
     def setWord(self, wordText):
         self.keyWord = relatedWords(wordText)
         syns = self.keyWord.buildWordList(True, self.listLength)
@@ -30,53 +30,65 @@ class buildHaiku():
         self.ants = [w.replace('_', ' ') for w in ants]        
         self.seasons = open(self.seasonWordPath).read().splitlines()
         return self.syns + self.ants + self.seasons
-        
+
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
+        print "----checking tweet: ", tweetText.encode('utf-8').strip()
         if not tweetObj.qualityControl():
+            print "the tweet did not pass QC"
             return list()
         if not self.classifyTweet(tweetObj.checkSylbls(7), 7):
             self.classifyTweet(tweetObj.checkSylbls(5), 5)
         if self.line1 and self.line2 and self.line3:
-            return self.line1 + self.line2 + self.line3
+            haikuLines = [" ".join(self.line1), " ".join(self.line2), " ".join(self.line3)]
+            return "\n".join(haikuLines)
         else:
             return list()    
 
     def classifyTweet(self, tweetWordList, Nsyls):
         if not tweetWordList:
             return False
-        # it is a synonym
+        # chech if it is a synonym
         if list(set(self.syns) & set(tweetWordList)) and not self.synsFound:
             if Nsyls == 7 and not self.line2:
-                self.line2 = tweetObj.text
-                return True
+                self.line2 = tweetWordList
+                self.synsFound = True
             elif Nsyls == 5 and not self.line1:
-                self.line1 = tweetObj.text
-                return True
+                self.line1 = tweetWordList
+                self.synsFound = True
             elif Nsyls == 5 and not self.line3:
-                self.line3 = tweetObj.text
+                self.line3 = tweetWordList
+                self.synsFound = True
+            if self.synsFound:
+                print 'this tweet will be the synonym'
                 return True
-        # it is an antonym
+        # chech if it is an antonym
         if list(set(self.ants) & set(tweetWordList)) and not self.antsFound:
             if Nsyls == 7 and not self.line2:
-                self.line2 = tweetObj.text
-                return True
+                self.line2 = tweetWordList
+                self.antsFound = True
             elif Nsyls == 5 and not self.line3:
-                self.line3 = tweetObj.text
-                return True
+                self.line3 = tweetWordList
+                self.antsFound = True
             elif Nsyls == 5 and not self.line1:
-                self.line1 = tweetObj.text
+                self.line1 = tweetWordList
+                self.antsFound = True
+            if self.antsFound:
+                print 'this tweet will be the antonym'
                 return True
-        # it is an season
+        # chech if it is an season
         if list(set(self.seasons) & set(tweetWordList)) and not self.seasonsFound:
             if Nsyls == 7 and not self.line2:
-                self.line2 = tweetObj.text
-                return True
+                self.line2 = tweetWordList
+                self.seasonsFound = True
             elif Nsyls == 5 and not self.line1:
-                self.line1 = tweetObj.text
-                return True
+                self.line1 = tweetWordList
+                self.seasonsFound = True
             elif Nsyls == 5 and not self.line3:
-                self.line3 = tweetObj.text
+                self.line3 = tweetWordList
+                self.seasonsFound = True
+            if self.seasonsFound:
+                print 'this tweet will be the season'
                 return True
         return False        
 
@@ -86,10 +98,10 @@ class checkTweet():
         self.h_en = Hyphenator('en_US')
         self.badSymbols = ['http:', 'https:', '&']
         self.forbiddenThings = ['@'] # random syms
-        self.forbiddenWords = [' el ', ' la ', ' en ', ' tu ', # spanish
-            ' Et ', ' le ', ' aux ', ' les ', ' de ', ' des ', ' du ', ' il ', ' Elle ',
-            ' ses ', ' sa ', ' ces ', ' cela ', ' est ', ' vous ', ' tous ', ' nous ',
-            ' allez ', ' alons '] # french
+        self.forbiddenWords = ['el', 'la', 'en', 'tu', # spanish
+            'Et', 'le', 'aux', 'les', 'de', 'des', 'du', 'il', 'Elle',
+            'ses', 'sa', 'ces', 'cela', 'est', 'vous', 'tous', 'nous',
+            'allez', 'alons'] # french
 
     def qualityControl(self):
         self.replaceText()
@@ -103,6 +115,8 @@ class checkTweet():
         self.textWords = [w.replace('#', 'hashtag ') for w in self.textWords]
 
     def remove_at_symbol_first(self):
+        if re.search('RT', self.textWords[0]):
+            del self.textWords[0]
         if re.search('@', self.textWords[0]):
             del self.textWords[0]
 
@@ -116,16 +130,19 @@ class checkTweet():
             
     def words_no_vowels(self):
         for word in self.textWords:
-            if not re.search("([aeiouy]+)", word):
+            if not re.search("([aeiouyAEIOUY]+)", word):
+                print word, ' - did not contain any vowels'
                 return True
         return False
 
     def check_forbiddenThings(self):
         for s in self.forbiddenThings:
             if any([re.search(s, word) for word in self.textWords]):
+                print 'the forbidden thing: ', s, ' as found'
                 return True
-        for s in self.forbiddenWords:                
+        for s in self.forbiddenWords:
             if any([re.search('^'+s+'$', word, re.IGNORECASE) for word in self.textWords]):
+                print 'the forbidden word: ', s, ' as found'
                 return True
         return False
 
@@ -134,6 +151,7 @@ class checkTweet():
         finalWords = self.confirmSylsCounts(Nsyls)
         if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
             return list()
+        print Nsyls, "syls found... final text: ", finalWords  
         return finalWords               
     
     def confirmSylsCounts(self, Nsyls):
@@ -235,7 +253,8 @@ class relatedWords():
         Nsynsets = len(wn.synsets(word))
         if Nsynsets == 0:
             return word 
-        groupInd = randint(0, Nsynsets -1)
+#         groupInd = randint(0, Nsynsets -1)
+        groupInd = 0
         outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
         if curDepth == targetDepth:
             return outputList
