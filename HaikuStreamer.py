@@ -7,7 +7,7 @@ class HaikuStreamer(TwythonStreamer):
         self.newHaiku = buildHaiku()
 
     def get_tweets(self, word):
-        wordlist = newHaiku.setWord(word)
+        wordlist = self.newHaiku.setWord(word)
         wordstring = ', '.join(wordlist)
         print('search terms:')
         print(wordstring)
