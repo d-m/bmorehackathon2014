@@ -9,9 +9,9 @@ import copy
 class buildHaiku():
     def __init__(self):
         self.finalHaiku = list()
-        self.seasonWordPath = 'testList.txt'
+        self.seasonWordPath = 'winterWords.txt'
         self.keyWord = relatedWords()
-        self.listLength = 5
+        self.listLength = 100
         self.syns = []
         self.ants = []
         self.seasons = []
@@ -94,6 +94,8 @@ class buildHaiku():
 
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
+        # only keep latin chars:
+        text = re.sub(ur'[^\x00-\x7F\x80-\xFF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]', u'', text) 
         self.textWords = text.split()
         self.h_en = Hyphenator('en_US')
         self.badSymbols = ['http:', 'https:', '&']
@@ -102,13 +104,16 @@ class checkTweet():
             'Et', 'le', 'aux', 'les', 'de', 'des', 'du', 'il', 'Elle',
             'ses', 'sa', 'ces', 'cela', 'est', 'vous', 'tous', 'nous',
             'allez', 'alons'] # french
+        self.forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or', 'has',
+            'my', 'your', 'their', 'his', 'hers', 'her\'s', 'get', 'it\'ll', 'to']        
 
     def qualityControl(self):
         self.replaceText()
         self.remove_at_symbol_first()
         self.remove_symbolWords()
-        if self.words_no_vowels() or self.check_forbiddenThings():
+        if self.check_forbiddenThings():
             return False
+        print "post QC tweet: ", " ".join(self.textWords)
         return True
     
     def replaceText(self):
@@ -127,29 +132,30 @@ class checkTweet():
                 for s in self.badSymbols:
                     if re.search(s, word):
                         del self.textWords[i]
+                        break
             
-    def words_no_vowels(self):
-        for word in self.textWords:
+    def words_no_vowels(self, wordList):
+        for word in wordList:
             if not re.search("([aeiouyAEIOUY]+)", word):
-                print word, ' - did not contain any vowels'
+                print word.encode('ascii','ignore'), ' - did not contain any vowels'
                 return True
         return False
 
     def check_forbiddenThings(self):
         for s in self.forbiddenThings:
             if any([re.search(s, word) for word in self.textWords]):
-                print 'the forbidden thing: ', s, ' as found'
+                print 'the forbidden thing: ', s, ' was found'
                 return True
         for s in self.forbiddenWords:
             if any([re.search('^'+s+'$', word, re.IGNORECASE) for word in self.textWords]):
-                print 'the forbidden word: ', s, ' as found'
+                print 'the forbidden word: ', s, ' was found'
                 return True
         return False
 
     def checkSylbls(self, Nsyls):
-        forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or']
         finalWords = self.confirmSylsCounts(Nsyls)
-        if not finalWords or any(finalWords[-1] == s for s in forbiddenEnds):
+        if not finalWords or self.words_no_vowels(finalWords) \
+        or any(finalWords[-1] == s for s in self.forbiddenEnds):
             return list()
         print Nsyls, "syls found... final text: ", finalWords  
         return finalWords               
@@ -179,6 +185,8 @@ class checkTweet():
             return list()
             
     def count_syllables(self, word):
+        if not word:
+            return 0, 0
         vowels = ['a', 'e', 'i', 'o', 'u']
 
         on_vowel = False
@@ -241,8 +249,8 @@ class relatedWords():
             if Ntries > desperation:
                 desperation = desperation + 1
                 Ntries = 1
-                if desperation > 5:
-                    print '5 recursions only yeilded: ', len(thisTry), ' words!'
+                if desperation > 10:
+                    print '10 recursions only yeilded: ', len(thisTry), ' words!'
                     break
             else:
                 Ntries = Ntries + 1
@@ -253,8 +261,7 @@ class relatedWords():
         Nsynsets = len(wn.synsets(word))
         if Nsynsets == 0:
             return word 
-#         groupInd = randint(0, Nsynsets -1)
-        groupInd = 0
+        groupInd = randint(0, Nsynsets -1)
         outputList = copy.copy(wn.synsets(word)[groupInd].lemma_names())
         if curDepth == targetDepth:
             return outputList
