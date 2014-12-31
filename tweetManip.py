@@ -43,7 +43,7 @@ class buildHaiku():
             self.classifyTweet(tweetObj.checkSylbls(5), 5)
         if self.line1 and self.line2 and self.line3:
             haikuLines = [" ".join(self.line1), " ".join(self.line2), " ".join(self.line3)]
-            return "\n".join(haikuLines)
+            return "<br>\n".join(haikuLines)
         else:
             return list()    
 
