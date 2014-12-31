@@ -24,16 +24,18 @@ class buildHaiku():
 
     def setWord(self, wordText):
         self.keyWord = relatedWords(wordText)
-        syns = self.keyWord.buildWordList(True, self.listLength)
-        self.syns = [w.replace('_', ' ') for w in syns]
-        ants = self.keyWord.buildWordList(False, self.listLength)
-        self.ants = [w.replace('_', ' ') for w in ants]        
         self.seasons = open(self.seasonWordPath).read().splitlines()
+        syns = self.keyWord.buildWordList(True, self.listLength)
+        ants = self.keyWord.buildWordList(False, len(syns))
+        syns = syns[:len(ants)]
+        self.seasons = self.seasons[:len(ants)]
+        self.syns = [w.replace('_', ' ') for w in syns]
+        self.ants = [w.replace('_', ' ') for w in ants]        
         return self.syns + self.ants + self.seasons
 
     def newTweet(self, tweetText):
         tweetObj = checkTweet(tweetText)
-        print "----checking tweet: ", tweetText.encode('utf-8').strip()
+        print "----checking tweet: ", tweetObj.rawText
         if not tweetObj.qualityControl():
             print "the tweet did not pass QC"
             return list()
@@ -48,8 +50,9 @@ class buildHaiku():
     def classifyTweet(self, tweetWordList, Nsyls):
         if not tweetWordList:
             return False
+        singleStr = " ".join(tweetWordList)
         # chech if it is a synonym
-        if list(set(self.syns) & set(tweetWordList)) and not self.synsFound:
+        if any([re.search(word, singleStr) for word in self.syns]) and not self.synsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetWordList
                 self.synsFound = True
@@ -63,7 +66,7 @@ class buildHaiku():
                 print 'this tweet will be the synonym'
                 return True
         # chech if it is an antonym
-        if list(set(self.ants) & set(tweetWordList)) and not self.antsFound:
+        if any([re.search(word, singleStr) for word in self.ants]) and not self.antsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetWordList
                 self.antsFound = True
@@ -77,7 +80,7 @@ class buildHaiku():
                 print 'this tweet will be the antonym'
                 return True
         # chech if it is an season
-        if list(set(self.seasons) & set(tweetWordList)) and not self.seasonsFound:
+        if any([re.search(word, singleStr) for word in self.seasons]) and not self.seasonsFound:
             if Nsyls == 7 and not self.line2:
                 self.line2 = tweetWordList
                 self.seasonsFound = True
@@ -95,8 +98,8 @@ class buildHaiku():
 class checkTweet():
     def __init__(self, text = 'Defualt Tweet'):
         # only keep latin chars:
-        text = re.sub(ur'[^\x00-\x7F\x80-\xFF\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF]', u'', text) 
-        self.textWords = text.split()
+        self.rawText = re.sub(ur'[^\x00-\x7F]', u'', text) 
+        self.textWords = self.rawText.split()
         self.h_en = Hyphenator('en_US')
         self.badSymbols = ['http:', 'https:', '&']
         self.forbiddenThings = ['@'] # random syms
@@ -105,7 +108,8 @@ class checkTweet():
             'ses', 'sa', 'ces', 'cela', 'est', 'vous', 'tous', 'nous',
             'allez', 'alons'] # french
         self.forbiddenEnds = ['the', 'and', 'a', 'an', 'for', 'at', 'except', 'or', 'has',
-            'my', 'your', 'their', 'his', 'hers', 'her\'s', 'get', 'it\'ll', 'to']        
+            'my', 'your', 'their', 'his', 'hers', 'her\'s', 'get', 'it\'ll', 'to', 'like',
+            'is', 'I']        
 
     def qualityControl(self):
         self.replaceText()
@@ -126,9 +130,8 @@ class checkTweet():
             del self.textWords[0]
 
     def remove_symbolWords(self):
-        # remove words with badSymbols and unicode chars
+        # remove words with badSymbols
         for i, word in enumerate(self.textWords):
-                self.textWords[i] = unicode(word.encode('ascii','ignore'))
                 for s in self.badSymbols:
                     if re.search(s, word):
                         del self.textWords[i]
@@ -137,7 +140,7 @@ class checkTweet():
     def words_no_vowels(self, wordList):
         for word in wordList:
             if not re.search("([aeiouyAEIOUY]+)", word):
-                print word.encode('ascii','ignore'), ' - did not contain any vowels'
+                print word, ' - did not contain any vowels'
                 return True
         return False
 
