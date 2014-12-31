@@ -39,7 +39,7 @@ if (empty($_GET) || $prevErr){
     <body>
         <div id="haiku">
             <div id="finalText">
-                <br>Listening for tweetkus...                
+                <br>Listening for a Tweetku...                
             </div>            
         </div>
     </body>

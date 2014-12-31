@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="css/app.css">
     </head>
     <body>
-        <form action="wait.php" method="post">
+        <form id="formText" action="wait.php" method="post">
             Tweetku Topic: <input type="text" name="name"><br>
             <input type="submit">
         </form>
